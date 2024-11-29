@@ -110,33 +110,19 @@ echo "Selected map: $START_MAP"
 
 
 # Add additional game parameters
-game_parameters="${GAME_PARAMS} +gamemode ${GAMEMODE} +map ${START_MAP}"
+game_parameters="${GAME_PARAMS} -game ${GAME_NAME} +gamemode ${GAMEMODE} +map ${START_MAP}"
+game_parameters="${game_parameters} -console +port ${GAME_PORT}"
 
-# if [ -n "${WORKSHOP_COLLECTION}" ] && [ -n "${AUTH_KEY}" ]; then
-#     game_parameters="${game_parameters} -authkey ${AUTH_KEY} +host_workshop_collection ${WORKSHOP_COLLECTION}"
-# fi
+if [ -n "${WORKSHOP_COLLECTION}" ] && [ -n "${AUTH_KEY}" ]; then
+    echo "---Adding Workshop Collection: ${WORKSHOP_COLLECTION} and AUTH_KEY: ${AUTH_KEY}---"
+    game_parameters="${game_parameters} -authkey ${AUTH_KEY} +host_workshop_collection ${WORKSHOP_COLLECTION}"
+fi
 
 touch $MARKER_FILE
 
-##### VERIFICATION #####
-
-# Add these checks and delays before starting the server
-echo "---Verify Steam setup---"
-if [ ! -f ${DATA_DIR}/.steam/sdk32/steamclient.so ]; then
-    echo "Steam client library missing!"
-    exit 1
-fi
-
-# Add small delay to ensure Steam API is ready
-echo "---Waiting for Steam API initialization---"
-sleep 5
-
-# Verify LD_LIBRARY_PATH includes Steam directories
-export LD_LIBRARY_PATH="${DATA_DIR}/.steam/sdk32:${SERVER_DIR}:${LD_LIBRARY_PATH}"
-
-##### STARTING SERVER #####
-
-ls -l ${DATA_DIR}/.steam/sdk32/steamclient.so
 echo "---Start Server---"
+echo "!!!! game parameters: ${game_parameters}"
+
 cd ${SERVER_DIR}
-${SERVER_DIR}/srcds_run -game ${GAME_NAME} ${game_parameters} -console +port ${GAME_PORT} 
+
+exec script -q -c "${SERVER_DIR}/srcds_run ${game_parameters}" /dev/null

@@ -1,48 +1,73 @@
-FROM ich777/debian-baseimage:bullseye_amd64
+# FROM ich777/debian-baseimage:bullseye_amd64
+FROM debian:stable-slim
 
 LABEL org.opencontainers.image.authors="admin@minenet.at"
 LABEL org.opencontainers.image.source="https://github.com/ich777/docker-steamcmd-server"
 
-RUN apt-get update && \
-	apt-get -y install --no-install-recommends lib32gcc-s1 lib32stdc++6 lib32z1 dos2unix && \
-	rm -rf /var/lib/apt/lists/*
+RUN dpkg --add-architecture i386 && \
+    apt-get update && \
+    apt-get -y install --no-install-recommends \
+        lib32gcc-s1 \
+        lib32stdc++6 \
+        lib32z1 \
+        dos2unix \
+        lib32ncurses6 \
+        lib32tinfo6 \
+        lib32readline8 \
+        wget \
+        tar \
+        expect \
+        ca-certificates \
+        locales && \                          
+    rm -rf /var/lib/apt/lists/* && \
+    # Set locale
+    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
 
-#template
-ENV GAME_ID="4020" 
-ENV GAME_NAME="garrysmod"
-ENV GAME_PARAMS="-secure +maxplayers 12"
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8
 
-ENV GAME_PORT=27015
+# Game environment variables
+ENV GAME_ID="4020" \
+    GAME_NAME="garrysmod" \
+    GAME_PARAMS="-secure +maxplayers 12" \
+    GAME_PORT=27015 \
+    GAMEMODE="terrortown" \
+    START_MAP="ttt_minecraft_b5" \
+    MOUNT_CSSOURCE="false"
 
-ENV GAMEMODE="terrortown"
-ENV START_MAP="ttt_minecraft_b5"
-# TODO: Remove auth key and workshop collection
 ENV AUTH_KEY=""
 ENV WORKSHOP_COLLECTION=""
 
-ENV MOUNT_CSSOURCE="true" 
-
+# Directory structure
+    
 ENV DATA_DIR="/serverdata"
 ENV STEAMCMD_DIR="${DATA_DIR}/steamcmd"
 ENV SERVER_DIR="${DATA_DIR}/serverfiles"
 ENV CONFIG_DIR="${SERVER_DIR}/${GAME_NAME}/cfg"
+ENV STEAM_DIR="{DATA_DIR}/Steam"
 
-ENV VALIDATE=""
-ENV START_MAP=""
-ENV UMASK=000
-ENV UID=99
-ENV GID=100
-ENV USERNAME=""
-ENV PASSWRD=""
-ENV USER="steam"
-ENV DATA_PERM=770
+# User settings
+ENV VALIDATE="" \
+    START_MAP="" \
+    UMASK=000 \
+    UID=99 \
+    GID=100 \
+    USERNAME="" \
+    PASSWRD="" \
+    USER="steam" \
+    DATA_PERM=770
 
-RUN mkdir $DATA_DIR && \
-	mkdir $STEAMCMD_DIR && \
-	mkdir $SERVER_DIR && \
-	useradd -d $DATA_DIR -s /bin/bash $USER && \
-	chown -R $USER $DATA_DIR && \
-	ulimit -n 2048
+# Create directory structure
+RUN mkdir -p ${DATA_DIR} \
+            ${STEAMCMD_DIR} \
+            ${SERVER_DIR} \
+            ${CONFIG_DIR} \
+            ${STEAM_DIR}/logs && \
+    useradd -d ${DATA_DIR} -s /bin/bash ${USER} && \
+    chown -R ${USER}:${GID} ${DATA_DIR} && \
+    chmod -R ${DATA_PERM} ${DATA_DIR}
 
 ADD /scripts/ /opt/scripts/
 ADD /config/ /opt/config/
