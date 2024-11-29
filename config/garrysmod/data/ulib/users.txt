@@ -1,0 +1,36 @@
+// TODO: remove this from the file for a public release
+"STEAM_0:1:55300506"
+{
+    "name" "DevilsThumb"
+    "deny"
+    {
+    }
+    "allow"
+    {
+    }
+    "group" "superadmin"
+}
+
+"STEAM_0:1:8308357"
+{
+    "name" "Excuses"
+    "deny"
+    {
+    }
+    "allow"
+    {
+    }
+    "group" "admin"
+}
+
+"STEAM_0:1:17472510"
+{
+    "name" "Seboss"
+    "deny"
+    {
+    }
+    "allow"
+    {
+    }
+    "group" "admin"
+}
