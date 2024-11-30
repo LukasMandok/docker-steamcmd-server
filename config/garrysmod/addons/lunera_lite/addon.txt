@@ -1,0 +1,8 @@
+"AddonInfo"
+{
+	"name"				"LuneraLITE"
+	"version"			"1.4.0"
+	"author_name"			"Richard"
+	"info"				"Linx's Sister - the MOTD System"
+	"override"			"0"
+}
