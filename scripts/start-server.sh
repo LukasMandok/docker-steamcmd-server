@@ -77,7 +77,9 @@ if [ "${GAME_NAME}" == "garrysmod" ] && [ ! -f "$MARKER_FILE" ]; then
 
     cp /opt/config/garrysmod/maps.txt ${SERVER_DIR}/maps.txt
 
-    cp -r /opt/config/garrysmod/data/* ${CONFIG_DIR}/data/
+    cp -r /opt/config/garrysmod/data/* ${GMOD_DIR}/data/
+    cp -r /opt/config/garrysmod/addons/* ${GMOD_DIR}/addons/
+
 else 
     echo "--- Configuration files already exist, skipping ---"
 fi
@@ -93,6 +95,9 @@ if [ ! -f ${DATA_DIR}/.steam/sdk32/steamclient.so ]; then
     cp -R ${STEAMCMD_DIR}/linux32/* ${DATA_DIR}/.steam/sdk32/
 fi
 chmod -R ${DATA_PERM} ${DATA_DIR}
+
+touch $MARKER_FILE
+
 echo "---Server ready---"
 
 ## RANDOM MAP SELECTION
@@ -112,8 +117,6 @@ fi
 
 echo "Selected map: $START_MAP"
 
-
-
 # Add additional game parameters
 game_parameters="${GAME_PARAMS} -game ${GAME_NAME} +gamemode ${GAMEMODE} +map ${START_MAP}"
 game_parameters="${game_parameters} -console +port ${GAME_PORT}"
@@ -122,8 +125,6 @@ if [ -n "${WORKSHOP_COLLECTION}" ] && [ -n "${AUTH_KEY}" ]; then
     echo "---Adding Workshop Collection: ${WORKSHOP_COLLECTION} and AUTH_KEY: ${AUTH_KEY}---"
     game_parameters="${game_parameters} -authkey ${AUTH_KEY} +host_workshop_collection ${WORKSHOP_COLLECTION}"
 fi
-
-touch $MARKER_FILE
 
 echo "---Start Server---"
 echo "!!!! game parameters: ${game_parameters}"
