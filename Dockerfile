@@ -31,7 +31,7 @@ ENV LANG=en_US.UTF-8 \
 # Game environment variables
 ENV GAME_ID="4020" \
     GAME_NAME="garrysmod" \
-    GAME_PARAMS="-secure +maxplayers 12" \
+    GAME_PARAMS="+maxplayers 12" \
     GAME_PORT=27015 \
     GAMEMODE="terrortown" \
     START_MAP="ttt_minecraft_b5" \
@@ -71,7 +71,8 @@ RUN mkdir -p ${DATA_DIR} \
 
 ADD /scripts/ /opt/scripts/
 ADD /config/ /opt/config/
-RUN chmod -R 770 /opt/scripts/
+RUN chown -R ${USER}:${GID} /opt/ && \
+    chmod -R ${DATA_PERM} /opt/
 
 # RUN dos2unix /opt/scripts/start.sh
 

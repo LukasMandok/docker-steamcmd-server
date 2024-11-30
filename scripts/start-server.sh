@@ -100,9 +100,14 @@ echo "---Server ready---"
 if [ -z ${START_MAP} ]; then
     echo " --- Select a random map ---"
     MAPS_FILE="${SERVER_DIR}/maps.txt"
-    MAPS=($(cat $MAPS_FILE))
+    MAPS=($(grep -v '^#' "$MAPS_FILE"))
     NUM_MAPS=${#MAPS[@]}
-    START_MAP=${MAPS[$RANDOM % $NUM_MAPS]}
+    if [ $NUM_MAPS -eq 0 ]; then
+        echo "Warning: No valid maps found in $MAPS_FILE"
+        START_MAP="ttt_minecraft_b5"  # Default fallback map
+    else
+        START_MAP=${MAPS[$RANDOM % $NUM_MAPS]}
+    fi
 fi
 
 echo "Selected map: $START_MAP"

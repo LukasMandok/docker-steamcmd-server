@@ -1,0 +1,2 @@
+# Default behavior: maintain LF endings for all files
+* text=auto eol=lf
