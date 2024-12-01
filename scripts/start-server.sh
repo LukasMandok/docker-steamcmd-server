@@ -118,7 +118,10 @@ echo "Selected map: $START_MAP"
 game_parameters="${GAME_PARAMS} -game ${GAME_NAME} +gamemode ${GAMEMODE} +map ${START_MAP}"
 game_parameters="${game_parameters} -console +port ${GAME_PORT}"
 
-if [ -n "${WORKSHOP_COLLECTION}" ] && [ -n "${AUTH_KEY}" ]; then
+echo "WORKSHOP_COLLECTION is: '${WORKSHOP_COLLECTION}'"
+echo "AUTH_KEY is: '${AUTH_KEY}'"
+
+if [[ -n "${WORKSHOP_COLLECTION}" && -n "${AUTH_KEY}" ]]; then
     echo "---Adding Workshop Collection: ${WORKSHOP_COLLECTION} and AUTH_KEY: ${AUTH_KEY}---"
     game_parameters="${game_parameters} -authkey ${AUTH_KEY} +host_workshop_collection ${WORKSHOP_COLLECTION}"
 fi
