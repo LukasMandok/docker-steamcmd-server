@@ -46,7 +46,7 @@ ENV DATA_DIR="/serverdata"
 ENV STEAMCMD_DIR="${DATA_DIR}/steamcmd"
 ENV SERVER_DIR="${DATA_DIR}/serverfiles"
 ENV GMOD_DIR="${SERVER_DIR}/${GAME_NAME}"
-ENV CONFIG_DIR="${SERVER_DIR}/${GAME_NAME}/cfg"
+ENV CONFIG_DIR="${GMOD_DIR}/cfg"
 ENV STEAM_DIR="{DATA_DIR}/Steam"
 
 # User settings
@@ -72,8 +72,10 @@ RUN mkdir -p ${DATA_DIR} \
 
 ADD /scripts/ /opt/scripts/
 ADD /config/ /opt/config/
-RUN chown -R ${USER}:${GID} /opt/ && \
-    chmod -R ${DATA_PERM} /opt/
+RUN chmod -R ${DATA_PERM} /opt/scripts/
+
+RUN chown -R ${USER}:${GID} /opt/config/ && \
+    chmod -R ${DATA_PERM} /opt/config/
 
 # RUN dos2unix /opt/scripts/start.sh
 

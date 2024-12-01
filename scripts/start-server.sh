@@ -49,22 +49,19 @@ run_steamcmd "" ""
 echo "--- Update Server ---  Installing game id: ${GAME_ID}"
 run_steamcmd "${GAME_ID}"
 
+# Create missing folders:
+mkdir -p ${CONFIG_DIR}
+
+mkdir -p "${GMOD_DIR}/data"
+mkdir -p "${GMOD_DIR}/addons"
+chmod ${DATA_PERM} "${GMOD_DIR}/data" "${GMOD_DIR}/addons"
+
 
 if [ "${MOUNT_CSSOURCE}" == "true" ]; then
     echo "--- Installing Counter-Strike: Source resources ---"
     run_steamcmd "232330" "${SERVER_DIR}/cssource" "true"
 
-    # echo "---Mounting Counter-Strike: Source resources---"
-    # if [ ! -d ${SERVER_DIR}/cstrike ]; then
-    #     mkdir ${SERVER_DIR}/cstrike
-    # fi
-    # ln -s ${DATA_DIR}/cssource/cstrike ${SERVER_DIR}/cstrike
-
-    echo "---Copying mount.cfg---"
-    if [ ! -d ${SERVER_DIR}/${GAME_NAME}/cfg ]; then
-        # mkdir -p ${SERVER_DIR}/${GAME_NAME}/cfg
-        mkdir -p ${CONFIG_DIR}
-    fi
+    echo "--- Copying mount.cfg ---"
     cp /opt/config/general/mount.cfg ${CONFIG_DIR}/mount.cfg
 fi
 
