@@ -72,10 +72,10 @@ RUN mkdir -p ${DATA_DIR} \
 
 ADD /scripts/ /opt/scripts/
 ADD /config/ /opt/config/
-RUN chmod -R ${DATA_PERM} /opt/scripts/
+# COPY scripts/* /opt/scripts/
+# COPY config/* /opt/config/
 
-RUN chown -R ${USER}:${GID} /opt/config/ && \
-    chmod -R ${DATA_PERM} /opt/config/
+RUN chmod -R ${DATA_PERM} /opt/scripts/ /opt/config/
 
 # RUN dos2unix /opt/scripts/start.sh
 
