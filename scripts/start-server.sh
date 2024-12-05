@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MARKER_FILE="${DATA_DIR}/.initialized"
+MARKER_FILE="${GMOD_DIR}/.initialized"
 
 run_steamcmd() {
     local app_id=${1:-""}
@@ -94,6 +94,8 @@ fi
 chmod -R ${DATA_PERM} ${DATA_DIR}
 
 touch $MARKER_FILE
+echo "created marker file:"
+ls ${GMOD_DIR}
 
 echo "---Server ready---"
 
